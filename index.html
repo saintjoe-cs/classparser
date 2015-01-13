@@ -52,14 +52,18 @@
                 fields = entry.split('\ \t');
                 name = fields[2];
 		phone = fields[7];
+	
 		// This didn't work, here for posterity and study
 		// name.replace(/^\(.*\),.*$/); 
+
+		// Re-arrange name to first name first
 	        parts = name.split(',');
 		last = parts[0];
 		// Separate first and middle (if any) names
 		parts2 = parts[1].split(" ");
 		// The zeroeth field is a single space. . . needs fixed?
 		first = parts2[1];
+
 		// Put together output
 		if (printPhones)
                    outString = outString + first + ' ' + last + ' (' + phone + ')\n';
@@ -68,6 +72,8 @@
                 })
 	    // Get rid of trailing newline
 	    outString = outString.trim();
+
+	    // Clear out the div, and then fill it with fresh
 	    $('#output').empty(); 
 	    $('#output').append('<pre>' + outString + '</pre>'); 
 	}
