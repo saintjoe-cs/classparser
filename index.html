@@ -1,0 +1,84 @@
+<html>
+<head>
+  <!-- Use jQuery from a CDN -->                      
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <title>Email Group Generator</title>
+</head>
+<body>
+    <h3>SJC Faculty Class Email Group Generator</h3>
+    <textarea rows="25" cols="100"></textarea>
+    <div></div>
+    <input type="button" onclick="csvEmail()" value="Emails"/>
+    <input type="button" onclick="roster(false)" value="Roster"/>
+    <input type="button" onClick="roster(true)" value="Roster + Phones"/>
+    <input type="button" onclick="clearArea()" value="Clear"/>
+    <script>
+
+	// Brian Capouch, a gift to the faculty 11 January 2015
+
+	// Our lonely global variable
+	var outString;
+
+	// Print list of emails as single CSV
+        function csvEmail(){
+	    outString = '';
+            var input = $('textarea').val(),
+	    lines = input.split('\n'),
+	    fields, email;
+
+	    // Iterate over each student record
+ 	    lines.forEach(function(entry) {
+		fields = entry.split('\ \t');
+		email = fields[10];
+	        outString = outString + email.trim() + ',';
+		})
+
+	    // Remove trailing comma
+	    outString = outString.replace(/[,;]$/,'');
+	    // Display results
+	    $('#output').empty();
+	    $('#output').append('<p>' + outString + '</p>');
+	}
+
+	// Print out a 'First Last (phone)' roster
+	// Note some name formats may trip this up
+	function roster(printPhones){
+	    outString = '';
+	    var input= $('textarea').val(),
+            lines = input.split('\n'),
+            fields, name, parts, parts2, phone, first, last;
+            lines.forEach(function(entry) {
+                fields = entry.split('\ \t');
+                name = fields[2];
+		phone = fields[7];
+		// This didn't work, here for posterity and study
+		// name.replace(/^\(.*\),.*$/); 
+	        parts = name.split(',');
+		last = parts[0];
+		// Separate first and middle (if any) names
+		parts2 = parts[1].split(" ");
+		// The zeroeth field is a single space. . . needs fixed?
+		first = parts2[1];
+		// Put together output
+		if (printPhones)
+                   outString = outString + first + ' ' + last + ' (' + phone + ')\n';
+		else
+		   outString = outString + first + ' ' + last + '\n';
+                })
+	    // Get rid of trailing newline
+	    outString = outString.trim();
+	    $('#output').empty(); 
+	    $('#output').append('<pre>' + outString + '</pre>'); 
+	}
+
+	// Clear input and output areas
+	function clearArea(){
+	    $("textarea").val('');
+	    $('#output').empty();
+	    };
+
+    </script>
+<div id="output"></div>
+</body>
+</html>
