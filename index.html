@@ -23,18 +23,23 @@
 	// Print list of emails as single CSV
         function csvEmail(){
 	    outString = '';
+	    // Fetch the data from the browser
             var input = $('textarea').val(),
+	    // Get each student record into its own "line"
 	    lines = input.split('\n'),
 	    fields, email;
 
 	    // Iterate over each student record
  	    lines.forEach(function(entry) {
+	 	// Split into an array on a space-followed-by-a-tab
 		fields = entry.split('\ \t');
+		// Email is at the 10th position in the array
 		email = fields[10];
+		// Add it to our output, followed by a comma
 	        outString = outString + email.trim() + ',';
 		})
 
-	    // Remove trailing comma
+	    // Finished processing one record, remove trailing comma
 	    outString = outString.replace(/[,;]$/,'');
 	    // Display results
 	    $('#output').empty();
@@ -44,6 +49,7 @@
 	// Print out a 'First Last (phone)' roster
 	// Note some name formats may trip this up
 	function roster(printPhones){
+	    // This is similar to the code above in operation
 	    outString = '';
 	    var input= $('textarea').val(),
             lines = input.split('\n'),
